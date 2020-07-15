@@ -1,0 +1,14 @@
+.componentDemo {
+    background-color: #ccc;
+    text-align: center;
+    padding:15px ;
+}
+
+.parent {
+    background-color: pink;
+    padding: 15px;
+}
+
+.son {
+    background-color: skyblue;
+}

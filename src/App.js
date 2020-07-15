@@ -1,11 +1,13 @@
 import React from 'react'
-
+import ComponentDemo from './components/componentDemo'
 const App = () => {
     // return 后面的括号等同于 React.createElement，所以必须引入React
     return (
         <div className="red">
             <p>I`m App Component!</p>
             <Component1 numbers={[1, 2, 3]}/>
+            <hr/>
+            <ComponentDemo />
         </div>
     )
 }
