@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import App from './App'
 
 let n = 0
 // createElement是React创建出来的一个虚拟DOM对象。
@@ -23,7 +24,7 @@ const myApp = () => React.createElement(
         )
     ]
 )
-ReactDOM.render(myApp() ,
+ReactDOM.render(<App />,
   document.getElementById('root')
 );
 
