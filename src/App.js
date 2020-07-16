@@ -1,5 +1,6 @@
 import React from 'react'
 import ComponentDemo from './components/componentDemo'
+import FunComponent from "./components/functionComponent";
 const App = () => {
     // return 后面的括号等同于 React.createElement，所以必须引入React
     return (
@@ -8,6 +9,8 @@ const App = () => {
             <Component1 numbers={[1, 2, 3]}/>
             <hr/>
             <ComponentDemo />
+            <hr/>
+            <FunComponent />
         </div>
     )
 }
@@ -28,7 +31,7 @@ const Component1 = (props) => {
 
     // 循环输出写法 2
     return props.numbers.map( (item,index) => {
-        return <div>{index} : {item}</div>
+        return <div key={index}>{index} : {item}</div>
     })
 }
 

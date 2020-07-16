@@ -19,7 +19,7 @@ function Parent(props) {
         <span>爸爸</span>
         {/*  函数组件使用外部数据 */}
         <div>我接收组件间传值：{props.name}</div>
-        <input type="text" name={"parent"} value={n}/>
+        <input type="text" name={"parent"} value={n} readOnly={true}/>
         {/* setN 永远不会去改变n，而是产生一个新的n */}
         <button onClick={() => setN(n + 1)}>+1</button>
         <Son name={'小李子'}/>
@@ -39,7 +39,7 @@ class Son extends React.Component {
             {/* 类组件使用外部数据 */}
             <div>我接收组件传值:{this.props.name}</div>
             {/* 类组件使用内部数据state */}
-            <input type="text" value={this.state.n}/>
+            <input type="text" value={this.state.n} readOnly={true}/>
             <button onClick={this.add}>+1</button>
         </div>
     }
