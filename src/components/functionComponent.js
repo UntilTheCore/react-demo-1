@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 // 函数组件练习，函数组件如何使用生命周期钩子
 
 // 自定义钩子，实现对数据监听时排除第一次初始化那次
@@ -14,26 +14,30 @@ const useUpdate = (fn,num) => {
     console.log('组件产生更新')
     const [count,setCount] = useState(0)
     useEffect( () => {
-        // setCount(x => {
-        //     console.log(x + 1)
-        //    return x + 1 }
-        // )
-    },[])
-    //
-    // useEffect( () => {
-    //     console.log(count);
-    //     if(count >= 1) {
-    //         fn()
-    //         // console.dir(fn)
-    //         // console.log('yes')
-    //     }
-    //     // TODO 数组不监听 fn 会有警告信息，监听了会产生调用两次fn的bug
-    // },[count])
+        setCount(x => {
+            console.log('setCount内的x:'+(x + 1))
+           return x + 1 }
+        )
+    },[num])
+
+    // 在这里对 fn 进行改造，使其保持一致，不受渲染的影响
+    // useCallback 是 useMemo 的语法糖，少些一个 () => fn
+    const temp = useCallback(fn,[])
+    useEffect( () => {
+        console.log(count);
+        if(count >= 1) {
+            // fn()
+            temp()
+        }
+        // 数组不监听 fn 会有警告信息，监听了会产生调用两次fn的bug
+        // 原因是每次重新渲染时会重新得到fn的值，所以传入到这个函数的fn在每次渲染后会不同
+        // 以至于我们将 fn 加入到依赖中会使fn调用两次
+    },[count,temp])
 }
 
 const FunComponent = () => {
     const [n, setN] = React.useState(0)
-    const onClick = () => {
+    const onClickN = () => {
         setN(n + 1)
     }
     let [childVisible, setChildVisible] = React.useState(1)
@@ -63,13 +67,14 @@ const FunComponent = () => {
     const fn = () => {
         console.log('n改变了!')
     }
+    console.log('父组件更新了!')
     // 使用自定义hook
     useUpdate( fn,n)
     return (
         <div>
             <p>我是FunComponent</p>
             n:{n}
-            <button onClick={onClick}> +1</button>
+            <button onClick={onClickN}> +1</button>
             {/*<Child />*/}
             {childVisible ?
                 <>
@@ -84,6 +89,16 @@ const FunComponent = () => {
 }
 
 const Child = () => {
+    console.log('Child组件更新了!')
+    const [m,setM] = useState(0)
+    // const [temp,setTemp] = useState(0)
+    // useEffect( () => {
+    //     console.log('Child 的m 发生改变了!')
+    //     setTemp( temp + 1 )
+    // },[m])
+    const onClickM = () => {
+        setM( m + 1 )
+    }
     // 模拟componentWillUnmount() 钩子函数
     // 注意一定要在第二个参数加 [] ,表示在加载和消亡时只调用一次
     React.useEffect(() => {
@@ -94,7 +109,11 @@ const Child = () => {
         }
     },[])
     return (
-        <div>Child - show</div>
+        <div>
+            <p>Child - show</p>
+            m:{m}
+            <button onClick={onClickM}>+1</button>
+        </div>
     )
 }
 
